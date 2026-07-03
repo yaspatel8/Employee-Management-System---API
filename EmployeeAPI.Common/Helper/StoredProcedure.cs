@@ -21,8 +21,8 @@ namespace EmployeeAPI.Common.Helper
         public const string DeleteEmployee = "SP_Employee_Delete";
         public const string GetEmployeesWithDepartment = "SP_Employee_EmployeeWithDepartment";
         public const string SaveEmployee = "SP_Employee_Save";
+        public const string BulkSaveEmployees = "SP_BulkSaveEmployees";
         #endregion
-
 
         #region Department
 
@@ -37,6 +37,7 @@ namespace EmployeeAPI.Common.Helper
         #region Register/Login
         public const string RegisterUser = "SP_Register";
         public const string Login = "SP_Login";
+        public const string ForgotPassword = "SP_ForgotPassword";
         #endregion
 
         #region Profile

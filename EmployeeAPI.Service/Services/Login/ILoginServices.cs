@@ -1,4 +1,5 @@
-﻿using EmployeeAPI.Model.Model;
+﻿using EmployeeAPI.Common;
+using EmployeeAPI.Model.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace EmployeeAPI.Service.Services.Login
     public interface ILoginServices
     {
         Task<LoginModel> LoginUser(LoginModel model);
+        Task<ApiResponseModel> ForgotPassword(string email, string token);
+        Task SendEmailAsync(string toEmail, string subject, string resetLink);
     }
 }

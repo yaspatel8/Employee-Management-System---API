@@ -272,7 +272,46 @@ namespace EmployeeAPI.Controllers
                 _logger.LogWarning("Employee with department not found.");
             }
             return response;
+        
+        }
+        [HttpPost("/BulkSaveEmployees")]
+        public async Task<BulkDbResponseModel> BulkSaveEmployees([FromBody] List<EmployeeModel> employees)
+        {
+            BulkDbResponseModel response = new();
+            foreach (var employee in employees)
+            {
+                employee.PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123");
+            }
+            var result = await _employeeService.BulkSaveEmployees(employees);
+            if (result.Code == (int)DbResponseCode.Success)
+            {
+                response.Success = true;
+                response.Message = result.Message;
+                response.InsertedCount = result.InsertedCount;
+                response.SkippedCount = result.SkippedCount;
+                response.DuplicateEmails = result.DuplicateEmails;
+                _logger.LogInformation("Bulk employee upload completed. Message: {Message}", result.Message,result);
+            }
+            else if(result.Code == (int)DbResponseCode.AlreadyExists)
+            {
+                response.Success = false;
+                response.Message = result.Message;
+                response.InsertedCount = result.InsertedCount;
+                response.SkippedCount = result.SkippedCount;
+                response.DuplicateEmails = result.DuplicateEmails;
+                _logger.LogWarning("Bulk employee upload failed. Message: {Message}", result.Message, result);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = result.Message;
+                response.InsertedCount = result.InsertedCount;
+                response.SkippedCount = result.SkippedCount;
+                response.DuplicateEmails = result.DuplicateEmails;
 
+                _logger.LogWarning("Bulk employee upload failed. Message: {Message}", result.Message, result);
+            }
+            return response;
         }
     }
 }

@@ -46,5 +46,9 @@ namespace EmployeeAPI.Service.Services.Employee
         {
             return await _employeeRepositry.GetEmployeesWithDepartment();
         }
+        public async Task<BulkDbResponseModel> BulkSaveEmployees(List<EmployeeModel> employees)
+        {
+            return await _employeeRepositry.BulkSaveEmployees(employees);
+        }
     }
 }

@@ -4,8 +4,10 @@ using EmployeeAPI.Service.Services.Login;
 using EmployeeAPI.Service.Services.Role;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace EmployeeAPI.Controllers
 {
@@ -54,9 +56,38 @@ namespace EmployeeAPI.Controllers
             response.Message = "Login Successful";
             _logger.LogInformation("Login successful for email: {Email}.", login.Email);
 
-            return Ok(new { Success=response.Success, Message = response.Message, Token = token });
+            return Ok(new { Success = response.Success, Message = response.Message, Token = token });
 
         }
+        [AllowAnonymous]
+        [HttpPost("ForgotPassword")]
+        public async Task<ApiResponseModel> ForgotPassword([FromBody] PasswordResetModel model)
+        {
+            ApiResponseModel response = new();
 
+            string token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+            var result = await _loginService.ForgotPassword(model.Email, token);
+
+            if (result.Code == (int)DbResponseCode.Success)
+            {
+                string resetLink = $"https://localhost:4200/reset-password?token={Uri.EscapeDataString(token)}";
+
+                await _loginService.SendEmailAsync(model.Email, "Reset Password", resetLink);
+                response.Success = true;
+                response.Success = true;
+                response.Message = result.Message;
+                _logger.LogInformation("{Message} for email: {Email}.", result.Message, model.Email);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = result.Message;
+                _logger.LogWarning("{Message} for email: {Email}.", result.Message, model.Email);
+            }
+
+            return response;
+        }
+       
     }
 }

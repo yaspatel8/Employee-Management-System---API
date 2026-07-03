@@ -1,4 +1,5 @@
-﻿using EmployeeAPI.Data.DBRepositry.Login;
+﻿using EmployeeAPI.Common;
+using EmployeeAPI.Data.DBRepositry.Login;
 using EmployeeAPI.Model.Model;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,14 @@ namespace EmployeeAPI.Service.Services.Login
         public async Task<LoginModel> LoginUser(LoginModel model)
         {
             return await _loginRepogitry.LoginUser(model);
+        }
+        public async Task<ApiResponseModel> ForgotPassword(string email, string token)
+        {
+            return await _loginRepogitry.ForgotPassword(email, token);
+        }
+        public async Task SendEmailAsync(string toEmail, string subject, string resetLink)
+        {
+             await _loginRepogitry.SendEmailAsync(toEmail, subject, resetLink);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace EmployeeAPI.Service
                 { typeof(IRegistorServices), typeof(RegistorServices) },
                 { typeof(ILoginServices), typeof(Loginservices) },
                 {typeof(IProfileServices), typeof(ProfileService) },
+                
             };
             return serviceDictonary;
         }

@@ -27,6 +27,8 @@ namespace EmployeeAPI.Data.DBRepositry.Department
                 DynamicParameters param = new();
                 param.Add("@DepartmentId", department.DepartmentId);
                 param.Add("@DepartmentName", department.DepartmentName);
+                param.Add("@UpdatedBy", department.UpdatedBy);
+                param.Add("@CreatedBy", department.CreatedBy);
                 var result = await _db.QueryFirstOrDefaultAsync<DbResponseModel>(StoredProcedure.SaveDepartment, param, commandType: CommandType.StoredProcedure);
                 return result;
             }
@@ -35,7 +37,6 @@ namespace EmployeeAPI.Data.DBRepositry.Department
                 throw new Exception(ex.Message);
             }
         }
-
 
 
         public async Task<List<DepartmentModel>> GetAllDepartment(CommonPaginationModel model)

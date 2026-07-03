@@ -13,6 +13,8 @@ namespace EmployeeAPI.Model.Model
         public bool IsActive { get; set; }
         public DateTime? UpdateAt { get; set; }
         public long? TotalRecords { get; set; }
+        public int? UpdatedBy { get; set; }
+        public int? CreatedBy { get; set; }
     }
     public class CommonPaginationModel : CommonModel
     {

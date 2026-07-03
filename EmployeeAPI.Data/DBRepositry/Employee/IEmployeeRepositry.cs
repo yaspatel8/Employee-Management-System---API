@@ -18,5 +18,7 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
         //Task<int> UpdateEmployee(EmployeeModel employee);
         Task<DbResponseModel> DeleteEmployee(int id);
         Task<List<EmployeeWithDepartmentModel>> GetEmployeesWithDepartment();
+
+        Task<BulkDbResponseModel> BulkSaveEmployees(List<EmployeeModel> employees);
     }
 }

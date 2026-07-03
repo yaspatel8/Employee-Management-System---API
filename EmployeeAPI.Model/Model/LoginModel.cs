@@ -21,5 +21,21 @@ namespace EmployeeAPI.Model.Model
 
         public string? RoleName { get; set; }
     }
-    
+    public class PasswordResetModel : LoginModel
+    {
+        public int PasswordResetId { get; set; }
+        [Required]
+        public int UserId { get; set; }
+
+        public string Token { get; set; } = string.Empty;
+
+        public DateTime ExpiryTime { get; set; }
+
+        public bool IsUsed { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime? UsedOn { get; set; }
+    }
+
 }

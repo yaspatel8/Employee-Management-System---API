@@ -1,5 +1,6 @@
 using EmployeeAPI;
 using EmployeeAPI.MiddleWare;
+using EmployeeAPI.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
@@ -60,6 +61,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(builder.Configuration.GetConnectionString("ConnectDB")));
 
 builder.Services.RegisterServices();
+builder.Services.Configure<EmailSettings>( builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services.AddCors(options =>
 {

@@ -35,6 +35,8 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
             param.Add("@PasswordHash", employee.PasswordHash);
             param.Add("@ProfileImage", employee.ProfileImage);
             param.Add("@OldFileName", dbType: DbType.String, direction: ParameterDirection.Output, size: 200);
+            param.Add("@UpdatedBy", employee.UpdatedBy);
+            param.Add("@CreatedBy", employee.CreatedBy);
 
             var result = await _db.QueryFirstOrDefaultAsync<DbResponseModel>(StoredProcedure.SaveEmployee, param, commandType: CommandType.StoredProcedure);
 
@@ -121,6 +123,29 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
 
             var result = await _db.QueryAsync<EmployeeWithDepartmentModel>(StoredProcedure.GetEmployeesWithDepartment, commandType: CommandType.StoredProcedure);
             return result.ToList();
+
+        }
+        public async Task<BulkDbResponseModel> BulkSaveEmployees(List<EmployeeModel> employees)
+        {
+            //DataTable use for bulk insert, create a DataTable and populate it with employee data
+            DataTable dt = new();
+            dt.Columns.Add("FullName", typeof(string));
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("PasswordHash", typeof(string));
+            dt.Columns.Add("Salary", typeof(decimal));
+            dt.Columns.Add("DepartmentId", typeof(int));
+
+            foreach (var employee in employees)
+            {
+                dt.Rows.Add(employee.FullName, employee.Email, employee.PasswordHash, employee.Salary, employee.DepartmentId);
+            }
+
+            DynamicParameters param = new();
+            param.Add("@Employees", dt.AsTableValuedParameter("dbo.EmployeeType")); // Assuming you have a user-defined table type named EmployeeType
+            param.Add("@CreatedBy", employees.FirstOrDefault()?.CreatedBy);
+            var result = await _db.QueryFirstOrDefaultAsync<BulkDbResponseModel>(StoredProcedure.BulkSaveEmployees, param, commandType: CommandType.StoredProcedure);
+
+            return result;
 
         }
     }

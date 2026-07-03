@@ -18,5 +18,6 @@ namespace EmployeeAPI.Service.Services.Employee
         //Task<int> UpdateEmployee(EmployeeModel employee);
         Task<DbResponseModel> DeleteEmployee(int id);
         Task<List<EmployeeWithDepartmentModel>> GetEmployeesWithDepartment();
+        Task<BulkDbResponseModel> BulkSaveEmployees(List<EmployeeModel> employees);
     }
 }

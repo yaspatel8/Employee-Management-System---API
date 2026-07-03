@@ -16,11 +16,10 @@ namespace EmployeeAPI.Model.Model
         public int? UserId { get; set; }
 
         public string? FullName { get; set; }
-        [Required]
+        
         public string? PhoneNumber { get; set; }
 
-        public decimal Salary { get; set; }
-        [Required]
+        public decimal? Salary { get; set; }
         public int DepartmentId { get; set; }
         public string Email { get; set; } = string.Empty;
 
