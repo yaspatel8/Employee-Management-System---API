@@ -196,5 +196,28 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
 
             await smtp.SendMailAsync(message);
         }
+        public async Task<ApiResponseModel> BulkDeleteEmployees(BulkDeleteEmployeeModel model)
+        {
+            DataTable dt = new();
+            dt.Columns.Add("EmployeeId", typeof(int));
+            foreach (var employeeId in model.EmployeeIds)
+            {
+                dt.Rows.Add(employeeId);
+            }
+            DynamicParameters param = new();
+            param.Add("@EmployeeIds", dt.AsTableValuedParameter("dbo.EmployeeDeleteType")); 
+            param.Add("@DeletedBy", model.UpdatedBy);
+            var result = await _db.QueryFirstOrDefaultAsync<ApiResponseModel>(StoredProcedure.BulkDeleteEmployees, param, commandType: CommandType.StoredProcedure);
+            return result;
+        }
+        public async Task<ApiResponseModel> ChangeEmployeeStatus(int employeeId, bool isActive, int updatedBy)
+        {
+            DynamicParameters param = new();
+            param.Add("@EmployeeId", employeeId);
+            param.Add("@IsActive", isActive);
+            param.Add("@UpdatedBy", updatedBy);
+            var result = await _db.QueryFirstOrDefaultAsync<ApiResponseModel>(StoredProcedure.ChangeEmployeeStatus, param, commandType: CommandType.StoredProcedure);
+            return result;
+        }
     }
 }

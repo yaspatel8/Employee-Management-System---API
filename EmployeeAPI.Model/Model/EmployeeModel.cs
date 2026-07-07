@@ -20,7 +20,8 @@ namespace EmployeeAPI.Model.Model
         public string? PhoneNumber { get; set; }
 
         public decimal? Salary { get; set; }
-        public int DepartmentId { get; set; }
+        public int? DepartmentId { get; set; }
+        public string? DepartmentName { get; set; }
         public string Email { get; set; } = string.Empty;
 
         public int RoleId { get; set; }
@@ -33,5 +34,9 @@ namespace EmployeeAPI.Model.Model
     public class EmployeeWithDepartmentModel : EmployeeModel
     {
         public string DepartmentName { get; set; }
+    }
+    public class BulkDeleteEmployeeModel : CommonModel
+    {
+       public List<int> EmployeeIds { get; set; } = new();
     }
 }

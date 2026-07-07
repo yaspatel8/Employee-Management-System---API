@@ -14,7 +14,9 @@ namespace EmployeeAPI.Service.Services.Department
         Task<List<DepartmentModel>> GetAllDepartment(CommonPaginationModel model);
         //Task<DepartmentModel?> GetDepartmentById(int id);
         Task<DbResponseModel> DeleteDepartment(int id);
-
         Task<List<DepartmentModel>> GetDepartment();
+        Task<ApiResponseModel> UpdateDepartmentStatus(int departmentId, bool isActive, int updatedBy);
+
     }   
+
 }

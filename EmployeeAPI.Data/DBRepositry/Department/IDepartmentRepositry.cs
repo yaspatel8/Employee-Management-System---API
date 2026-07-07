@@ -15,5 +15,6 @@ namespace EmployeeAPI.Data.DBRepositry.Department
         Task<DbResponseModel> DeleteDepartment(int id);
         Task<DbResponseModel> SaveDepartment(DepartmentModel department);
         Task<List<DepartmentModel>> GetDepartment();
+        Task<ApiResponseModel> UpdateDepartmentStatus(int departmentId, bool isActive, int updatedBy);
     }
 }

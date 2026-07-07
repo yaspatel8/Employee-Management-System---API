@@ -22,8 +22,7 @@ namespace EmployeeAPI.Data.DBRepositry.Department
 
         public async Task<DbResponseModel> SaveDepartment(DepartmentModel department)
         {
-            try
-            {
+           
                 DynamicParameters param = new();
                 param.Add("@DepartmentId", department.DepartmentId);
                 param.Add("@DepartmentName", department.DepartmentName);
@@ -31,18 +30,13 @@ namespace EmployeeAPI.Data.DBRepositry.Department
                 param.Add("@CreatedBy", department.CreatedBy);
                 var result = await _db.QueryFirstOrDefaultAsync<DbResponseModel>(StoredProcedure.SaveDepartment, param, commandType: CommandType.StoredProcedure);
                 return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+           
         }
 
 
         public async Task<List<DepartmentModel>> GetAllDepartment(CommonPaginationModel model)
         {
-            try
-            {
+           
                 DynamicParameters param = new();
                 param.Add("@SearchText", model.SearchText);
                 param.Add("@PageNumber", model.PageNumber);
@@ -51,11 +45,7 @@ namespace EmployeeAPI.Data.DBRepositry.Department
                 param.Add("@SortOrder", model.SortOrder);
                 var result = await _db.QueryAsync<DepartmentModel>(StoredProcedure.GetAllDepartment, param, commandType: CommandType.StoredProcedure);
                 return result.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+          
         }
         //public async Task<DepartmentModel?> GetDepartmentById(int id)
         //{
@@ -74,29 +64,30 @@ namespace EmployeeAPI.Data.DBRepositry.Department
 
         public async Task<DbResponseModel> DeleteDepartment(int id)
         {
-            try
-            {
+            
                 DynamicParameters param = new();
                 param.Add("@DepartmentId", id);
                 var result = await _db.QueryFirstOrDefaultAsync<DbResponseModel>(StoredProcedure.DeleteDepartment, param, commandType: CommandType.StoredProcedure);
                 return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+           
         }
         public async Task<List<DepartmentModel>> GetDepartment()
         {
-            try
-            {
+            
                 var result = await _db.QueryAsync<DepartmentModel>(StoredProcedure.SP_Department_Get, commandType: CommandType.StoredProcedure);
                 return result.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            
+        }
+        public async Task<ApiResponseModel> UpdateDepartmentStatus(int departmentId, bool isActive, int updatedBy)
+        {
+            
+                DynamicParameters param = new();
+                param.Add("@DepartmentId", departmentId);
+                param.Add("@IsActive", isActive);
+                param.Add("@UpdatedBy", updatedBy);
+                var result = await _db.QueryFirstOrDefaultAsync<ApiResponseModel>(StoredProcedure.UpdateDepartmentStatus, param, commandType: CommandType.StoredProcedure);
+                return result;
+
         }
     }
 }

@@ -20,5 +20,7 @@ namespace EmployeeAPI.Service.Services.Employee
         Task<List<EmployeeWithDepartmentModel>> GetEmployeesWithDepartment();
         Task<BulkDbResponseModel> BulkSaveEmployees(List<EmployeeModel> employees);
         Task SendEmployeeCreatedEmailAsync(string toEmail, string fullName, string password, string loginLink);
+        Task<ApiResponseModel> BulkDeleteEmployees(BulkDeleteEmployeeModel model);
+        Task<ApiResponseModel> ChangeEmployeeStatus(int employeeId, bool isActive, int updatedBy);
     }
 }

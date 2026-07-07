@@ -54,5 +54,13 @@ namespace EmployeeAPI.Service.Services.Employee
         {
             await _employeeRepositry.SendEmployeeCreatedEmailAsync( toEmail,  fullName,  password,  loginLink);
         }
+        public async Task<ApiResponseModel> BulkDeleteEmployees(BulkDeleteEmployeeModel model)
+        {
+            return await _employeeRepositry.BulkDeleteEmployees(model);
+        }
+        public async Task<ApiResponseModel> ChangeEmployeeStatus(int employeeId, bool isActive, int updatedBy)
+        {
+            return await _employeeRepositry.ChangeEmployeeStatus(employeeId, isActive, updatedBy);
+        }
     }
 }

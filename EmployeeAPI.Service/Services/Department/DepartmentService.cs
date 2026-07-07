@@ -19,7 +19,7 @@ namespace EmployeeAPI.Service.Services.Department
         }
 
 
-        public async Task<DbResponseModel> SaveDepartment (DepartmentModel department)
+        public async Task<DbResponseModel> SaveDepartment(DepartmentModel department)
         {
             return await _repositry.SaveDepartment(department);
         }
@@ -40,6 +40,10 @@ namespace EmployeeAPI.Service.Services.Department
         public async Task<List<DepartmentModel>> GetDepartment()
         {
             return await _repositry.GetDepartment();
+        }
+        public async Task<ApiResponseModel> UpdateDepartmentStatus(int departmentId, bool isActive, int updatedBy)
+        {
+            return await _repositry.UpdateDepartmentStatus(departmentId, isActive, updatedBy);
         }
     }
 }

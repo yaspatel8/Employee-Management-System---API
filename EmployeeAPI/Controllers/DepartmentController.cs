@@ -136,6 +136,25 @@ namespace EmployeeAPI.Controllers
             }
             return response;
         }
+        [HttpPost("/UpdateDepartmentStatus")]
+        public async Task<ApiResponseModel> UpdateDepartmentStatus( int departmentId, bool isActive, int updatedBy)
+        {
+            ApiResponseModel response = new();
+            var result = await _departmentService.UpdateDepartmentStatus(departmentId, isActive, updatedBy);
+            if (result.Success)
+            {
+                response.Success = true;
+                response.Message = result.Message;
+                _logger.LogInformation(result.Message, departmentId);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = result.Message;
+                _logger.LogWarning(result.Message, departmentId);
+            }
+            return response;
+        }
     }
 
 }

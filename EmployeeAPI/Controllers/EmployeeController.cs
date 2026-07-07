@@ -72,13 +72,17 @@ namespace EmployeeAPI.Controllers
 
                 employee.ProfileImage = uniqueFileName;
             }
+
             string password = "";
+            bool isNewEmployee = employee.EmployeeId == 0;
+
             // Default Password only for Add
-            if (employee.EmployeeId == 0)
+            if (isNewEmployee)
             {
                 password = PasswordGenerator.GeneratePassword(7);
                 employee.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
             }
+
             var result = await _employeeService.SaveEmployee(employee);
 
             if (result.Code == (int)DbResponseCode.Success)
@@ -101,8 +105,14 @@ namespace EmployeeAPI.Controllers
                         }
                     }
                 }
-                await _employeeService.SendEmployeeCreatedEmailAsync(employee.Email, employee.FullName, password, "http://localhost:4200/#/login");
-
+                if (isNewEmployee)
+                {
+                    await _employeeService.SendEmployeeCreatedEmailAsync(
+                        employee.Email,
+                        employee.FullName,
+                        password,
+                        "http://localhost:4200/login");
+                }
                 response.Success = true;
                 response.Message = result.Message;
                 _logger.LogInformation(result.Message, result);
@@ -341,6 +351,51 @@ namespace EmployeeAPI.Controllers
                 response.DuplicateEmails = result.DuplicateEmails;
 
                 _logger.LogWarning("Bulk employee upload failed. Message: {Message}", result.Message, result);
+            }
+            return response;
+        }
+        [HttpPost("/BulkDeleteEmployees")]
+        public async Task<ApiResponseModel> BulkDeleteEmployees([FromBody] BulkDeleteEmployeeModel model)
+        {
+            ApiResponseModel response = new();
+
+            var result = await _employeeService.BulkDeleteEmployees(model);
+            if(result.Code == (int)DbResponseCode.Success)
+            {
+                response.Success = true;
+                response.Message = result.Message;
+                _logger.LogInformation("Bulk employee deletion completed. Message: {Message}", result.Message, result);
+            }
+            else if(result.Code == (int)DbResponseCode.Fail)
+            {
+                response.Success = false;
+                response.Message = result.Message;
+                _logger.LogWarning(" No employees were deleted: {Message}", result.Message, result);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = result.Message;
+                _logger.LogWarning("Bulk employee deletion failed. Message: {Message}", result.Message, result);
+            }
+            return response;
+        }
+        [HttpPost("/ChangeEmployeeStatus")]
+        public async Task<ApiResponseModel> ChangeEmployeeStatus( int employeeId, bool isActive, int updatedBy)
+        {
+            ApiResponseModel response = new();
+            var result = await _employeeService.ChangeEmployeeStatus(employeeId, isActive, updatedBy);
+            if (result.Code == (int)DbResponseCode.Success)
+            {
+                response.Success = true;
+                response.Message = result.Message;
+                _logger.LogInformation(result.Message, result);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = result.Message;
+                _logger.LogWarning( result.Message, result);
             }
             return response;
         }

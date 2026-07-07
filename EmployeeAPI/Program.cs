@@ -61,7 +61,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(builder.Configuration.GetConnectionString("ConnectDB")));
 
 builder.Services.RegisterServices();
-builder.Services.Configure<EmailSettings>( builder.Configuration.GetSection("EmailSettings"));
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services.AddCors(options =>
 {
@@ -117,7 +117,6 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAngular");
 
-app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
@@ -128,7 +127,10 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseAuthentication();
+app.UseMiddleware<CheckUserActiveMiddleware>();
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 app.MapControllers();
 
 
