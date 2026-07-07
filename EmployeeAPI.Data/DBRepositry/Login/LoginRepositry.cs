@@ -67,7 +67,7 @@ namespace EmployeeAPI.Data.DBRepositry.Login
             message.IsBodyHtml = true;
 
             // Create HTML View
-            AlternateView htmlView = AlternateView.CreateAlternateViewFromString( body, null, "text/html");
+            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(body, null, "text/html");
             LinkedResource logo = new LinkedResource("Documents/logo.jpg");
 
             logo.ContentId = "companylogo";
@@ -87,6 +87,14 @@ namespace EmployeeAPI.Data.DBRepositry.Login
             smtp.EnableSsl = _emailSettings.EnableSsl;
 
             await smtp.SendMailAsync(message);
+        }
+        public async Task<ApiResponseModel> ResetPassword(resetPasswordModel model)
+        {
+            DynamicParameters param = new();
+            param.Add("@Token", model.Token);
+            param.Add("@PasswordHash", model.NewPassword);
+            var result = await _db.QueryFirstOrDefaultAsync<ApiResponseModel>(StoredProcedure.ResetPassword, param, commandType: CommandType.StoredProcedure);
+            return result;
         }
     }
 }

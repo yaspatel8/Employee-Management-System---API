@@ -12,6 +12,7 @@ namespace EmployeeAPI.Data.DBRepositry.Login
     {
         Task<LoginModel> LoginUser(LoginModel model);
         Task<ApiResponseModel> ForgotPassword(string email, string token);
-        Task SendEmailAsync(string toEmail, string subject, string body);   
+        Task SendEmailAsync(string toEmail, string subject, string body);
+        Task<ApiResponseModel> ResetPassword(resetPasswordModel model);
     }
 }

@@ -28,7 +28,7 @@ namespace EmployeeAPI.Controllers
             ApiResponseModel response = new();
 
             // Upload folder
-            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(),"Documents","ProfileImage");
+            string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Documents", "ProfileImage");
 
             if (!Directory.Exists(uploadsFolder))
             {
@@ -66,17 +66,18 @@ namespace EmployeeAPI.Controllers
 
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
-                {   
+                {
                     await employee.ProfilePicture.CopyToAsync(stream);
                 }
 
                 employee.ProfileImage = uniqueFileName;
             }
-
+            string password = "";
             // Default Password only for Add
             if (employee.EmployeeId == 0)
             {
-                employee.PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123");
+                password = PasswordGenerator.GeneratePassword(7);
+                employee.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
             }
             var result = await _employeeService.SaveEmployee(employee);
 
@@ -100,6 +101,8 @@ namespace EmployeeAPI.Controllers
                         }
                     }
                 }
+                await _employeeService.SendEmployeeCreatedEmailAsync(employee.Email, employee.FullName, password, "http://localhost:4200/#/login");
+
                 response.Success = true;
                 response.Message = result.Message;
                 _logger.LogInformation(result.Message, result);
@@ -272,17 +275,23 @@ namespace EmployeeAPI.Controllers
                 _logger.LogWarning("Employee with department not found.");
             }
             return response;
-        
+
         }
         [HttpPost("/BulkSaveEmployees")]
         public async Task<BulkDbResponseModel> BulkSaveEmployees([FromBody] List<EmployeeModel> employees)
         {
             BulkDbResponseModel response = new();
+
+            Dictionary<string, string> employeePasswords = new();
+            
             foreach (var employee in employees)
             {
-                employee.PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123");
+                string password = PasswordGenerator.GeneratePassword(7);
+                employee.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+                employeePasswords[employee.Email] = password;
             }
             var result = await _employeeService.BulkSaveEmployees(employees);
+
             if (result.Code == (int)DbResponseCode.Success)
             {
                 response.Success = true;
@@ -290,9 +299,31 @@ namespace EmployeeAPI.Controllers
                 response.InsertedCount = result.InsertedCount;
                 response.SkippedCount = result.SkippedCount;
                 response.DuplicateEmails = result.DuplicateEmails;
-                _logger.LogInformation("Bulk employee upload completed. Message: {Message}", result.Message,result);
+
+                List<string> duplicateEmails = new();
+
+                if (!string.IsNullOrWhiteSpace(result.DuplicateEmails))
+                {
+                    duplicateEmails = result.DuplicateEmails
+                        .Split(',')
+                        .Select(x => x.Trim().ToLower())
+                        .ToList();
+                }
+
+                foreach (var employee in employees)
+                {
+                    if (duplicateEmails.Contains(employee.Email.ToLower()))
+                        continue;
+
+                    await _employeeService.SendEmployeeCreatedEmailAsync(
+                        employee.Email,
+                        employee.FullName,
+                        employeePasswords[employee.Email],
+                         "http://localhost:4200/login");
+                }
+                _logger.LogInformation("Bulk employee upload completed. Message: {Message}", result.Message, result);
             }
-            else if(result.Code == (int)DbResponseCode.AlreadyExists)
+            else if (result.Code == (int)DbResponseCode.AlreadyExists)
             {
                 response.Success = false;
                 response.Message = result.Message;

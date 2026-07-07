@@ -13,5 +13,6 @@ namespace EmployeeAPI.Service.Services.Login
         Task<LoginModel> LoginUser(LoginModel model);
         Task<ApiResponseModel> ForgotPassword(string email, string token);
         Task SendEmailAsync(string toEmail, string subject, string resetLink);
+        Task<ApiResponseModel> ResetPassword(resetPasswordModel model);
     }
 }

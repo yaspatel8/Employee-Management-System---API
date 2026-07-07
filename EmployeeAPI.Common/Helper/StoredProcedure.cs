@@ -38,6 +38,7 @@ namespace EmployeeAPI.Common.Helper
         public const string RegisterUser = "SP_Register";
         public const string Login = "SP_Login";
         public const string ForgotPassword = "SP_ForgotPassword";
+        public const string ResetPassword = "SP_ResetPassword";
         #endregion
 
         #region Profile

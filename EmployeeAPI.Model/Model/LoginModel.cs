@@ -20,12 +20,15 @@ namespace EmployeeAPI.Model.Model
         public string PasswordHash { get; set; }
 
         public string? RoleName { get; set; }
+        public bool? IsFistLogin { get; set; }
     }
-    public class PasswordResetModel : LoginModel
+    public class PasswordResetModel : CommonModel
     {
         public int PasswordResetId { get; set; }
         [Required]
         public int UserId { get; set; }
+        [Required, EmailAddress]
+        public string Email { get; set; }
 
         public string Token { get; set; } = string.Empty;
 
@@ -36,6 +39,13 @@ namespace EmployeeAPI.Model.Model
         public DateTime CreatedOn { get; set; }
 
         public DateTime? UsedOn { get; set; }
+    }
+    public class resetPasswordModel 
+    {
+        [Required, MinLength(6)]
+        public string NewPassword { get; set; }
+        [Required]
+        public string Token { get; set; }
     }
 
 }

@@ -28,5 +28,9 @@ namespace EmployeeAPI.Service.Services.Login
         {
              await _loginRepogitry.SendEmailAsync(toEmail, subject, resetLink);
         }
+        public async Task<ApiResponseModel> ResetPassword(resetPasswordModel model)
+        {
+            return await _loginRepogitry.ResetPassword(model);
+        }
     }
 }

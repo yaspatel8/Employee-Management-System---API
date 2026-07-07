@@ -177,31 +177,44 @@
             <div class="content">
 
                 <div class="title">
-
-                    Hello, Your Gmail ID is
-                    <span class="highlight">{{Email}}</span>
-
+                    Welcome,
+                    <span class="highlight">{{FullName}}</span>
                 </div>
 
                 <p class="text">
-
-                    We received a request to reset the password for your
-                    <strong>Shaligram Infotech</strong> account.
-
+                    Your <strong>Employee Management System (EMS)</strong> account has been
+                    created successfully.
                 </p>
-
 
                 <p class="text">
-
-                    Click the button below to securely create your new password.
-
+                    Below are your login credentials:
                 </p>
+
+                <div class="info">
+
+                    <strong>Email Address</strong><br>
+                    {{Email}}
+
+                    <br><br>
+
+                    <strong>Temporary Password</strong><br>
+                    {{Password}}
+
+                    <br><br>
+
+                    <strong>Login URL</strong><br>
+
+                    <a href="{{LoginLink}}" style="color:#14d8ff;text-decoration:none;">
+                        {{LoginLink}}
+                    </a>
+
+                </div>
 
                 <p style="text-align:center;margin:40px 0;">
 
-                    <a href="{{ResetLink}}" class="button">
+                    <a href="{{LoginLink}}" class="button">
 
-                        RESET PASSWORD
+                        LOGIN TO EMS
 
                     </a>
 
@@ -213,42 +226,19 @@
 
                     <br><br>
 
-                    • This reset link is valid for <strong>5 minutes</strong>.
+                    • This is a temporary password generated for your account.
 
                     <br>
 
-                    • This link can be used <strong>only once</strong>.
+                    • Please change your password immediately after your first login.
 
                     <br>
 
-                    • If you didn't request a password reset, simply ignore this email.
+                    • Keep your credentials secure and never share them with anyone.
 
                 </div>
 
             </div>
-
-            <div class="footer">
-
-                Need Help?
-
-                <br><br>
-
-                <a href="mailto:support@shaligraminfotech.com">
-
-                    support@shaligraminfotech.com
-
-                </a>
-
-                <br><br>
-
-                © 2026 Shaligram Infotech
-
-                <br>
-
-                Digitizing Businesses
-
-            </div>
-
         </div>
 
     </div>

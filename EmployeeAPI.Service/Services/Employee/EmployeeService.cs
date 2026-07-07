@@ -50,5 +50,9 @@ namespace EmployeeAPI.Service.Services.Employee
         {
             return await _employeeRepositry.BulkSaveEmployees(employees);
         }
+        public async Task SendEmployeeCreatedEmailAsync(string toEmail, string fullName, string password, string loginLink)
+        {
+            await _employeeRepositry.SendEmployeeCreatedEmailAsync( toEmail,  fullName,  password,  loginLink);
+        }
     }
 }

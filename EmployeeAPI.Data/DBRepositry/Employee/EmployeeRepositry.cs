@@ -1,11 +1,15 @@
 ﻿using Dapper;
 using EmployeeAPI.Common;
 using EmployeeAPI.Common.Helper;
+using EmployeeAPI.Model;
 using EmployeeAPI.Model.Model;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +19,12 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
     public class EmployeeRepositry : IEmployeeRepositry
     {
         private readonly IDbConnection _db;
+        private readonly EmailSettings _emailSettings;
 
-        public EmployeeRepositry(IDbConnection db)
+        public EmployeeRepositry(IDbConnection db,IOptions<EmailSettings> emailSettings)
         {
             _db = db;
+            _emailSettings = emailSettings.Value;
         }
 
         public async Task<DbResponseModel> SaveEmployee(EmployeeModel employee)
@@ -147,6 +153,48 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
 
             return result;
 
+        }
+        public async Task SendEmployeeCreatedEmailAsync(string toEmail, string fullName, string password, string loginLink)
+        {
+            string body = await File.ReadAllTextAsync("EmailTemplates/Welcome.html");
+
+            body = body.Replace("{{FullName}}", fullName);
+            body = body.Replace("{{Email}}", toEmail);
+            body = body.Replace("{{Password}}", password);
+            body = body.Replace("{{LoginLink}}", loginLink);
+
+            using MailMessage message = new();
+
+            message.From = new MailAddress(
+                _emailSettings.FromEmail,
+                _emailSettings.DisplayName);
+
+            message.To.Add(toEmail);
+
+            message.Subject = "Welcome to Employee Management System";
+            message.IsBodyHtml = true;
+
+            AlternateView htmlView =
+                AlternateView.CreateAlternateViewFromString(body, null, "text/html");
+
+            LinkedResource logo = new LinkedResource("Documents/logo.jpg");
+            logo.ContentId = "companylogo";
+
+            htmlView.LinkedResources.Add(logo);
+
+            message.AlternateViews.Add(htmlView);
+
+            using SmtpClient smtp = new SmtpClient(
+                _emailSettings.Host,
+                _emailSettings.Port);
+
+            smtp.Credentials = new NetworkCredential(
+                _emailSettings.Username,
+                _emailSettings.Password);
+
+            smtp.EnableSsl = _emailSettings.EnableSsl;
+
+            await smtp.SendMailAsync(message);
         }
     }
 }

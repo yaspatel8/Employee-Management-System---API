@@ -11,6 +11,7 @@ namespace EmployeeAPI.Common
         public int Code { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; } = string.Empty;
+        public bool? IsFistLogin { get; set; }
     }
     public class ApiResponse<T> : ApiResponseModel
     {
@@ -32,5 +33,6 @@ namespace EmployeeAPI.Common
         public int InsertedCount { get; set; }
         public int SkippedCount { get; set; }
         public string? DuplicateEmails { get; set; }
+        public string FullName { get; set; }
     }
 }
