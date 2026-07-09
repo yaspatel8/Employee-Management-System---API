@@ -1,9 +1,15 @@
 ﻿using EmployeeAPI.Common;
+using EmployeeAPI.Common.Export;
 using EmployeeAPI.Model.Model;
-using EmployeeAPI.Service.Services.Department;
 using EmployeeAPI.Service.Services.Employee;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
+
+using System.Data;
+
+
 
 namespace EmployeeAPI.Controllers
 {
@@ -13,11 +19,13 @@ namespace EmployeeAPI.Controllers
     {
         private readonly IEmployeeService _employeeService;
         private readonly ILogger<EmployeeController> _logger;
+        private readonly IExcelExportService _excelService;
 
-        public EmployeeController(IEmployeeService employeeService, ILogger<EmployeeController> logger)
+        public EmployeeController(IEmployeeService employeeService, ILogger<EmployeeController> logger, IExcelExportService excelService)
         {
             _employeeService = employeeService;
             _logger = logger;
+            _excelService = excelService;
         }
 
         [HttpPost("/SaveEmployee")]
@@ -293,7 +301,7 @@ namespace EmployeeAPI.Controllers
             BulkDbResponseModel response = new();
 
             Dictionary<string, string> employeePasswords = new();
-            
+
             foreach (var employee in employees)
             {
                 string password = PasswordGenerator.GeneratePassword(7);
@@ -360,13 +368,13 @@ namespace EmployeeAPI.Controllers
             ApiResponseModel response = new();
 
             var result = await _employeeService.BulkDeleteEmployees(model);
-            if(result.Code == (int)DbResponseCode.Success)
+            if (result.Code == (int)DbResponseCode.Success)
             {
                 response.Success = true;
                 response.Message = result.Message;
                 _logger.LogInformation("Bulk employee deletion completed. Message: {Message}", result.Message, result);
             }
-            else if(result.Code == (int)DbResponseCode.Fail)
+            else if (result.Code == (int)DbResponseCode.Fail)
             {
                 response.Success = false;
                 response.Message = result.Message;
@@ -381,7 +389,7 @@ namespace EmployeeAPI.Controllers
             return response;
         }
         [HttpPost("/ChangeEmployeeStatus")]
-        public async Task<ApiResponseModel> ChangeEmployeeStatus( int employeeId, bool isActive, int updatedBy)
+        public async Task<ApiResponseModel> ChangeEmployeeStatus(int employeeId, bool isActive, int updatedBy)
         {
             ApiResponseModel response = new();
             var result = await _employeeService.ChangeEmployeeStatus(employeeId, isActive, updatedBy);
@@ -395,9 +403,69 @@ namespace EmployeeAPI.Controllers
             {
                 response.Success = false;
                 response.Message = result.Message;
-                _logger.LogWarning( result.Message, result);
+                _logger.LogWarning(result.Message, result);
             }
             return response;
+        }
+
+        [HttpPost("/BulkUpdateEmployees")]
+        public async Task<BulkDbResponseModel> BulkUpdateEmployees([FromBody] List<BulkUpdateEmployeeModel> employees)
+        {
+            BulkDbResponseModel response = new();
+            var result = await _employeeService.BulkUpdateEmployees(employees);
+            if (result.Code == (int)DbResponseCode.Success)
+            {
+                response.Success = true;
+                response.Message = result.Message;
+                response.InsertedCount = result.InsertedCount;
+                response.SkippedCount = result.SkippedCount;
+                List<string> duplicateEmails = new();
+
+                if (!string.IsNullOrWhiteSpace(result.DuplicateEmails))
+                {
+                    duplicateEmails = result.DuplicateEmails
+                        .Split(',')
+                        .Select(x => x.Trim().ToLower())
+                        .ToList();
+                }
+
+                foreach (var employee in employees)
+                {
+                    if (duplicateEmails.Contains(employee.Email.ToLower()))
+                        continue;
+                }
+                _logger.LogInformation("Bulk employee update completed. Message: {Message}", result.Message, result);
+            }
+            else if (result.Code == (int)DbResponseCode.AlreadyExists)
+            {
+                response.Success = false;
+                response.Message = result.Message;
+                response.InsertedCount = result.InsertedCount;
+                response.SkippedCount = result.SkippedCount;
+                response.DuplicateEmails = result.DuplicateEmails;
+                _logger.LogWarning("Bulk employee update failed. Message: {Message}", result.Message, result);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = result.Message;
+                response.InsertedCount = result.InsertedCount;
+                response.SkippedCount = result.SkippedCount;
+                _logger.LogWarning("Bulk employee update failed. Message: {Message}", result.Message, result);
+            }
+            return response;
+        }
+        [HttpPost("/ExportEmployees")]
+        public async Task<IActionResult> ExportEmployees([FromBody] List<int> ids)
+        {
+            var employees = await _employeeService.ExportEmployees(ids);
+            if (employees == null || !employees.Any())
+            {
+                return NotFound("No employees found for the provided IDs.");
+            }
+            var file = _excelService.ExportToExcel( employees, "Employees");
+
+            return File( file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Employees_{DateTime.Now:yyyyMMddHHmmss}.xlsx");
         }
     }
 }

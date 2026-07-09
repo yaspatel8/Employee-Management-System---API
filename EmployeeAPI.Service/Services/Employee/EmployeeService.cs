@@ -1,8 +1,10 @@
 ﻿using EmployeeAPI.Common;
 using EmployeeAPI.Data.DBRepositry.Employee;
 using EmployeeAPI.Model.Model;
+using EmployeeAPI.Model.Model.Export;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,6 +63,14 @@ namespace EmployeeAPI.Service.Services.Employee
         public async Task<ApiResponseModel> ChangeEmployeeStatus(int employeeId, bool isActive, int updatedBy)
         {
             return await _employeeRepositry.ChangeEmployeeStatus(employeeId, isActive, updatedBy);
+        }
+        public async Task<BulkDbResponseModel> BulkUpdateEmployees(List<BulkUpdateEmployeeModel> employees)
+        {
+            return await _employeeRepositry.BulkUpdateEmployees(employees);
+        }
+        public async Task<List<EmployeeExportModel>> ExportEmployees(List<int> ids)
+        {
+            return await _employeeRepositry.ExportEmployees(ids);
         }
     }
 }

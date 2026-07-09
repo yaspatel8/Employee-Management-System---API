@@ -1,5 +1,6 @@
 ﻿using EmployeeAPI.Common;
 using EmployeeAPI.Model.Model;
+using EmployeeAPI.Model.Model.Export;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace EmployeeAPI.Data.DBRepositry.Department
         Task<DbResponseModel> SaveDepartment(DepartmentModel department);
         Task<List<DepartmentModel>> GetDepartment();
         Task<ApiResponseModel> UpdateDepartmentStatus(int departmentId, bool isActive, int updatedBy);
+        Task<List<DepartmentExportModel>> ExportDepartments(List<int> ids);
     }
 }

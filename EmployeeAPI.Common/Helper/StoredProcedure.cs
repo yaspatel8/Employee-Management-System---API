@@ -24,6 +24,8 @@ namespace EmployeeAPI.Common.Helper
         public const string BulkSaveEmployees = "SP_BulkSaveEmployees";
         public const string BulkDeleteEmployees = "SP_BulkDeleteEmployees";
         public const string ChangeEmployeeStatus = "SP_ChangeEmployeeStatus";
+        public const string BulkUpdateEmployees = "SP_BulkUpdateEmployees";
+        public const string ExportEmployees = "SP_ExportEmployees";
         #endregion
 
         #region Department
@@ -34,6 +36,7 @@ namespace EmployeeAPI.Common.Helper
         public const string SaveDepartment = "SP_Department_Save";
         public const string SP_Department_Get = "SP_Department_Get";
         public const string UpdateDepartmentStatus = "SP_Department_UpdateStatus";
+        public const string ExportDepartments = "SP_Department_Export";
 
         #endregion
 

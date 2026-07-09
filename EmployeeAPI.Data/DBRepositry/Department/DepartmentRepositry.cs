@@ -2,6 +2,7 @@
 using EmployeeAPI.Common;
 using EmployeeAPI.Common.Helper;
 using EmployeeAPI.Model.Model;
+using EmployeeAPI.Model.Model.Export;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -88,6 +89,19 @@ namespace EmployeeAPI.Data.DBRepositry.Department
                 var result = await _db.QueryFirstOrDefaultAsync<ApiResponseModel>(StoredProcedure.UpdateDepartmentStatus, param, commandType: CommandType.StoredProcedure);
                 return result;
 
+        }
+        public async Task<List<DepartmentExportModel>> ExportDepartments(List<int> ids)
+        {
+            DataTable dt = new();
+            dt.Columns.Add("Id", typeof(int));
+            foreach (var id in ids)
+            {
+                dt.Rows.Add(id);
+            }
+            DynamicParameters param = new();
+            param.Add("@DepartmentIds", dt.AsTableValuedParameter("dbo.IdListType"));
+            var result = await _db.QueryAsync<DepartmentExportModel>(StoredProcedure.ExportDepartments, param, commandType: CommandType.StoredProcedure);
+            return result.ToList();
         }
     }
 }

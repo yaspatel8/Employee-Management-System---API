@@ -3,8 +3,10 @@ using EmployeeAPI.Common;
 using EmployeeAPI.Common.Helper;
 using EmployeeAPI.Model;
 using EmployeeAPI.Model.Model;
+using EmployeeAPI.Model.Model.Export;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -218,6 +220,39 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
             param.Add("@UpdatedBy", updatedBy);
             var result = await _db.QueryFirstOrDefaultAsync<ApiResponseModel>(StoredProcedure.ChangeEmployeeStatus, param, commandType: CommandType.StoredProcedure);
             return result;
+        }
+
+        public async Task<BulkDbResponseModel> BulkUpdateEmployees(List<BulkUpdateEmployeeModel> employees)
+        {
+            DataTable dt = new();
+            dt.Columns.Add("EmployeeId", typeof(int));
+            dt.Columns.Add("FullName", typeof(string));
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("Salary", typeof(decimal));
+            dt.Columns.Add("DepartmentId", typeof(int));
+            dt.Columns.Add("IsActive", typeof(bool));
+            foreach (var employee in employees)
+            {
+                dt.Rows.Add(employee.EmployeeId, employee.FullName, employee.Email, employee.Salary, employee.DepartmentId, employee.IsActive);
+            }
+            DynamicParameters param = new();
+            param.Add("@Employees", dt.AsTableValuedParameter("dbo.EmployeeUpdateType")); 
+            param.Add("@UpdatedBy", employees.FirstOrDefault()?.UpdatedBy);
+            var result = await _db.QueryFirstOrDefaultAsync<BulkDbResponseModel>(StoredProcedure.BulkUpdateEmployees, param, commandType: CommandType.StoredProcedure);
+            return result;
+        }
+        public async Task<List<EmployeeExportModel>> ExportEmployees(List<int> ids)
+        {
+            DataTable dt = new();
+            dt.Columns.Add("Id", typeof(int));
+            foreach (var id in ids)
+            {
+                dt.Rows.Add(id);
+            }
+            DynamicParameters param = new();
+            param.Add("@EmployeeIds", dt.AsTableValuedParameter("dbo.IdListType")); 
+            var result = await _db.QueryAsync<EmployeeExportModel>(StoredProcedure.ExportEmployees, param, commandType: CommandType.StoredProcedure);
+            return result.ToList();
         }
     }
 }

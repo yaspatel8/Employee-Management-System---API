@@ -1,7 +1,9 @@
 ﻿using EmployeeAPI.Common;
 using EmployeeAPI.Model.Model;
+using EmployeeAPI.Model.Model.Export;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,5 +24,8 @@ namespace EmployeeAPI.Service.Services.Employee
         Task SendEmployeeCreatedEmailAsync(string toEmail, string fullName, string password, string loginLink);
         Task<ApiResponseModel> BulkDeleteEmployees(BulkDeleteEmployeeModel model);
         Task<ApiResponseModel> ChangeEmployeeStatus(int employeeId, bool isActive, int updatedBy);
+
+        Task<BulkDbResponseModel> BulkUpdateEmployees(List<BulkUpdateEmployeeModel> employees);
+        Task<List<EmployeeExportModel>> ExportEmployees(List<int> ids);
     }
 }

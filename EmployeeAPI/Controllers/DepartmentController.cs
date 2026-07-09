@@ -1,4 +1,5 @@
 ﻿using EmployeeAPI.Common;
+using EmployeeAPI.Common.Export;
 using EmployeeAPI.Model.Model;
 using EmployeeAPI.Service.Services.Department;
 using Microsoft.AspNetCore.Authorization;
@@ -14,11 +15,13 @@ namespace EmployeeAPI.Controllers
     {
         private readonly IDepartmentService _departmentService;
         private readonly ILogger<DepartmentController> _logger;
-            
-        public DepartmentController(IDepartmentService departmentService, ILogger<DepartmentController> logger)
+        private readonly IExcelExportService _excelService;
+
+        public DepartmentController(IDepartmentService departmentService, ILogger<DepartmentController> logger, IExcelExportService excelService)
         {
             _departmentService = departmentService;
             _logger = logger;
+            _excelService = excelService;
         }
 
         [HttpPost]
@@ -154,6 +157,18 @@ namespace EmployeeAPI.Controllers
                 _logger.LogWarning(result.Message, departmentId);
             }
             return response;
+        }
+        [HttpPost("/ExportDepartment")]
+        public async Task<IActionResult> ExportDepartments([FromBody] List<int> ids)
+        {
+            var departments = await _departmentService.ExportDepartments(ids);
+            if (departments == null || !departments.Any())
+            {
+                return NotFound("No departments found for the provided IDs.");
+            }
+            var file = _excelService.ExportToExcel(departments, "Departments");
+
+            return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Departments_{DateTime.Now:yyyyMMddHHmmss}.xlsx");
         }
     }
 

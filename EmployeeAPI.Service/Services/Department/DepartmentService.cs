@@ -1,6 +1,7 @@
 ﻿using EmployeeAPI.Common;
 using EmployeeAPI.Data.DBRepositry.Department;
 using EmployeeAPI.Model.Model;
+using EmployeeAPI.Model.Model.Export;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,10 @@ namespace EmployeeAPI.Service.Services.Department
         public async Task<ApiResponseModel> UpdateDepartmentStatus(int departmentId, bool isActive, int updatedBy)
         {
             return await _repositry.UpdateDepartmentStatus(departmentId, isActive, updatedBy);
+        }
+        public async Task<List<DepartmentExportModel>> ExportDepartments(List<int> ids)
+        {
+            return await _repositry.ExportDepartments(ids);
         }
     }
 }
