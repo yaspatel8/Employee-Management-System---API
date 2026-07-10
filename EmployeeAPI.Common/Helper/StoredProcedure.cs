@@ -26,6 +26,8 @@ namespace EmployeeAPI.Common.Helper
         public const string ChangeEmployeeStatus = "SP_ChangeEmployeeStatus";
         public const string BulkUpdateEmployees = "SP_BulkUpdateEmployees";
         public const string ExportEmployees = "SP_ExportEmployees";
+        public const string GetManagers = "SP_GetManagers";
+
         #endregion
 
         #region Department
@@ -50,6 +52,16 @@ namespace EmployeeAPI.Common.Helper
         #region Profile
         public const string GetProfile = "SP_Profile_Get";
         public const string UpdateProfile = "SP_Profile_Update";
+        #endregion
+
+        #region Position
+
+        public const string AddOrUpdatePosition = "SP_AddOrUpdatePosition";
+        public const string GetAllPosition = "SP_GetAllPosition";
+        public const string GetAllActivePosition = "SP_GetAllActivePosition";
+        public const string DeletePosition = "SP_DeletePosition";
+        public const string UpdatePositionStatus = "SP_Position_UpdateStatus";
+
         #endregion
 
     }

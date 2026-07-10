@@ -4,6 +4,7 @@ using EmployeeAPI.Data.DBRepositry.Login;
 using EmployeeAPI.Data.DBRepositry.Profile;
 using EmployeeAPI.Data.DBRepositry.Register;
 using EmployeeAPI.Data.DBRepositry.Role;
+using EmployeeAPI.Data.DBRepositry.Position;
 
 namespace EmployeeAPI.Data
 {
@@ -18,7 +19,8 @@ namespace EmployeeAPI.Data
                 { typeof(IDepartmentRepositry), typeof(DepartmentRepositry) },
                 {typeof(IRegisterRepogitry), typeof(RegisterRepogitry)  },
                 {typeof(ILoginRepogistry), typeof(LoginRepositry) },
-                {typeof(IProfileRepository), typeof(ProfileRepository) }
+                {typeof(IProfileRepository), typeof(ProfileRepository) },
+                {typeof(IPositionRepositry), typeof(Positionrepositry) },
             };
             return dataDictionary;
         }

@@ -72,5 +72,9 @@ namespace EmployeeAPI.Service.Services.Employee
         {
             return await _employeeRepositry.ExportEmployees(ids);
         }
+        public async Task<List<ManagerDropdownModel>> GetManagerDropdown(int departmentId, int positionId)
+        {
+            return await _employeeRepositry.GetManagerDropdown(departmentId, positionId);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using EmployeeAPI.Service.Services.Department;
 using EmployeeAPI.Service.Services.Employee;
 using EmployeeAPI.Service.Services.Login;
+using EmployeeAPI.Service.Services.Position;
 using EmployeeAPI.Service.Services.Profile;
 using EmployeeAPI.Service.Services.Registor;
 using EmployeeAPI.Service.Services.Role;
@@ -21,7 +22,8 @@ namespace EmployeeAPI.Service
                 { typeof(ILoginServices), typeof(Loginservices) },
                 {typeof(IProfileServices), typeof(ProfileService) },
                 {typeof(IExcelExportService), typeof(ExcelExportService) },
-                
+                {typeof(IPositionServices), typeof(PositionServices) },
+
             };
             return serviceDictonary;
         }

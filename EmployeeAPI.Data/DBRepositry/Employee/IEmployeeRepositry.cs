@@ -29,5 +29,6 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
         Task<ApiResponseModel> ChangeEmployeeStatus(int employeeId, bool isActive,int updatedBy);
         Task<BulkDbResponseModel> BulkUpdateEmployees(List<BulkUpdateEmployeeModel> employees);
         Task<List<EmployeeExportModel>> ExportEmployees(List<int> ids);
+        Task<List<ManagerDropdownModel>> GetManagerDropdown(int departmentId, int positionId);
     }
 }

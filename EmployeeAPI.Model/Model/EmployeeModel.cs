@@ -29,6 +29,9 @@ namespace EmployeeAPI.Model.Model
         public string PasswordHash { get; set; } = string.Empty;
         public IFormFile? ProfilePicture { get; set; }
         public string? ProfileImage { get; set; }
+        public int? PositionId { get; set; }
+        public string? PositionName { get; set; }
+        public int? ManagerId { get; set; }
 
     }
     public class EmployeeWithDepartmentModel : EmployeeModel

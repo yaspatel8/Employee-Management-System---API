@@ -467,5 +467,18 @@ namespace EmployeeAPI.Controllers
 
             return File( file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"Employees_{DateTime.Now:yyyyMMddHHmmss}.xlsx");
         }
+
+        [HttpGet("/Managers")]
+        public async Task<ApiResponse<List<ManagerDropdownModel>>> GetManagers(int departmentId,int positionId)
+        {
+            ApiResponse<List<ManagerDropdownModel>> response = new();
+
+            var result = await _employeeService.GetManagerDropdown(departmentId,positionId);
+            response.Success = true;
+            response.Message = "Managers retrieved successfully.";
+            response.Data = result;
+            _logger.LogInformation("Managers retrieved successfully. Count: {Count}", result.Count);
+            return response;
+        }
     }
 }

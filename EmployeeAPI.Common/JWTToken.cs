@@ -37,7 +37,7 @@ namespace EmployeeAPI.Common
                 claims: claims,
 
                 expires:
-                    DateTime.UtcNow.AddMinutes(10),
+                    DateTime.UtcNow.AddMinutes(30),
 
                 signingCredentials:
                     credentials);

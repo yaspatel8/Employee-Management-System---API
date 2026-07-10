@@ -45,6 +45,9 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
             param.Add("@OldFileName", dbType: DbType.String, direction: ParameterDirection.Output, size: 200);
             param.Add("@UpdatedBy", employee.UpdatedBy);
             param.Add("@CreatedBy", employee.CreatedBy);
+            param.Add("@PositionId", employee.PositionId);
+            param.Add("@ManagerId", employee.ManagerId);
+            
 
             var result = await _db.QueryFirstOrDefaultAsync<DbResponseModel>(StoredProcedure.SaveEmployee, param, commandType: CommandType.StoredProcedure);
 
@@ -252,6 +255,15 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
             DynamicParameters param = new();
             param.Add("@EmployeeIds", dt.AsTableValuedParameter("dbo.IdListType")); 
             var result = await _db.QueryAsync<EmployeeExportModel>(StoredProcedure.ExportEmployees, param, commandType: CommandType.StoredProcedure);
+            return result.ToList();
+        }
+
+        public async Task<List<ManagerDropdownModel>> GetManagerDropdown(int departmentId,int positionId)
+        {
+            DynamicParameters param = new();
+            param.Add("@DepartmentId", departmentId);
+            param.Add("@PositionId", positionId);
+            var result = await _db.QueryAsync<ManagerDropdownModel>(StoredProcedure.GetManagers, param, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
     }
