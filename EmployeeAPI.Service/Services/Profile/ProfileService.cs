@@ -22,5 +22,9 @@ namespace EmployeeAPI.Service.Services.Profile
         {
             return await _profileRepository.GetProfile(id);
         }
+        public async Task<List<HierarchyTreeDto>> GetHierarchyTree(int? DepartmentId)
+        {
+            return await _profileRepository.GetHierarchyTree(DepartmentId);
+        }
     }
 }

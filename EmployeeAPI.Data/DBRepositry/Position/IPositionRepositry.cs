@@ -15,5 +15,6 @@ namespace EmployeeAPI.Data.DBRepositry.Position
         Task<ApiResponseModel> DeletePosition(int id);
         Task<List<PositionModel>> GetPositionActive();
         Task<ApiResponseModel> UpdatePositionStatus(int positionId, bool isActive, int updatedBy);
+        
     }
 }

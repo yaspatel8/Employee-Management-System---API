@@ -32,6 +32,7 @@ namespace EmployeeAPI.Model.Model
         public int? PositionId { get; set; }
         public string? PositionName { get; set; }
         public int? ReportsToEmployeePositionId { get; set; }
+        public string? ManagerEmail { get; set; }
 
     }
     public class EmployeeWithDepartmentModel : EmployeeModel

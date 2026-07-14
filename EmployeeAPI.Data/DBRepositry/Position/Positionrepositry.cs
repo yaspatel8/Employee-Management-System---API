@@ -63,5 +63,6 @@ namespace EmployeeAPI.Data.DBRepositry.Position
             var result = await _db.QueryFirstOrDefaultAsync<ApiResponseModel>(StoredProcedure.UpdatePositionStatus, param, commandType: CommandType.StoredProcedure);
             return result;
         }
+
     }
 }

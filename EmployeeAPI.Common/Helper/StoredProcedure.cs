@@ -64,5 +64,9 @@ namespace EmployeeAPI.Common.Helper
 
         #endregion
 
+        #region TreeView
+        public const string GetHierarchyTree = "SP_GetHierarchyTree";
+
+        #endregion
     }
 }

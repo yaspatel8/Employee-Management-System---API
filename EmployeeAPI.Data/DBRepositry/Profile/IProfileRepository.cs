@@ -11,5 +11,6 @@ namespace EmployeeAPI.Data.DBRepositry.Profile
     public interface IProfileRepository
     {
         Task<EmployeeWithDepartmentModel> GetProfile(int id);
+        Task<List<HierarchyTreeDto>> GetHierarchyTree(int? DepartmentId);
     }
 }

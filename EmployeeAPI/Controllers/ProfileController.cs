@@ -41,6 +41,27 @@ namespace EmployeeAPI.Controllers
             }
             return response;
         }
+        
+        [HttpPost("/GetHierarchyTree/{DepartmentId}")]
+        public async Task<ApiResponse<List<HierarchyTreeDto>>> GetHierarchyTree(int? DepartmentId )
+        {
+            ApiResponse<List<HierarchyTreeDto>> response = new();
 
+            var result = await _profileService.GetHierarchyTree(DepartmentId);
+            if (result != null)
+            {
+                response.Success = true;
+                response.Message = "Hierarchy Tree Get SuccessFully";
+                response.Data = result;
+                _logger.LogInformation("Hierarchy Tree Get SuccessFully", result);
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Hierarchy Tree Not Get";
+                _logger.LogWarning("Hierarchy Tree Not Get ", result);
+            }
+            return response;
+        }
     }
 }

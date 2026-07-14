@@ -21,17 +21,19 @@ namespace EmployeeAPI.Data.DBRepositry.Profile
 
         public async Task<EmployeeWithDepartmentModel> GetProfile(int id)
         {
-            try
-            {
-                DynamicParameters param=new();
-                param.Add("@UserId", id);
-                var result = await _db.QueryFirstOrDefaultAsync<EmployeeWithDepartmentModel>(StoredProcedure.GetProfile, param, commandType: CommandType.StoredProcedure);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-}
+            DynamicParameters param = new();
+            param.Add("@UserId", id);
+            var result = await _db.QueryFirstOrDefaultAsync<EmployeeWithDepartmentModel>(StoredProcedure.GetProfile, param, commandType: CommandType.StoredProcedure);
+            return result;
+
+        }
+
+        public async Task<List<HierarchyTreeDto>> GetHierarchyTree(int? DepartmentId)
+        {
+            DynamicParameters param = new();
+            param.Add("@DepartmentId", DepartmentId);
+            var result = await _db.QueryAsync<HierarchyTreeDto>(StoredProcedure.GetHierarchyTree, param, commandType: CommandType.StoredProcedure);
+            return result.ToList();
         }
     }
 }

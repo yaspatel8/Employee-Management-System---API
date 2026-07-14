@@ -8,6 +8,7 @@ namespace EmployeeAPI.Model.Model
 {
     public class ManagerDropdownModel
     {
+        public int EmployeePositionId { get; set; }
         public int EmployeeId { get; set; }
 
         public string FullName { get; set; }
