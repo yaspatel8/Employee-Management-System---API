@@ -46,7 +46,7 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
             param.Add("@UpdatedBy", employee.UpdatedBy);
             param.Add("@CreatedBy", employee.CreatedBy);
             param.Add("@PositionId", employee.PositionId);
-            param.Add("@ManagerId", employee.ManagerId);
+            param.Add("@ReportsToEmployeePositionId", employee.ReportsToEmployeePositionId);
             
 
             var result = await _db.QueryFirstOrDefaultAsync<DbResponseModel>(StoredProcedure.SaveEmployee, param, commandType: CommandType.StoredProcedure);

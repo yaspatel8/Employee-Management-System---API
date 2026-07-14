@@ -31,7 +31,7 @@ namespace EmployeeAPI.Model.Model
         public string? ProfileImage { get; set; }
         public int? PositionId { get; set; }
         public string? PositionName { get; set; }
-        public int? ManagerId { get; set; }
+        public int? ReportsToEmployeePositionId { get; set; }
 
     }
     public class EmployeeWithDepartmentModel : EmployeeModel
