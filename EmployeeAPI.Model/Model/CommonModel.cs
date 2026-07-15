@@ -25,4 +25,8 @@ namespace EmployeeAPI.Model.Model
         public string? SortOrder { get; set; }
 
     }
+    public class UseridBasedModel : CommonPaginationModel
+    {
+        public int? UserId { get; set; }
+    }
 }

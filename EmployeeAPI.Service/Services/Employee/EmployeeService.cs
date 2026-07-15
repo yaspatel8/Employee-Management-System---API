@@ -28,7 +28,7 @@ namespace EmployeeAPI.Service.Services.Employee
         //{
         //    return await _employeeRepositry.AddEmployee(employee);
         //}
-        public async Task<List<EmployeeModel>> GetAllEmployees(CommonPaginationModel model)
+        public async Task<List<EmployeeModel>> GetAllEmployees(UseridBasedModel model)
         {
             return await _employeeRepositry.GetAllEmployees(model);
         }

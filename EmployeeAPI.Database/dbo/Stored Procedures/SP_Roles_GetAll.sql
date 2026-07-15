@@ -1,0 +1,5 @@
+﻿CREATE   PROCEDURE SP_Roles_GetAll
+AS
+BEGIN
+	SELECT * FROM Roles WHERE IsDeleted=0
+END

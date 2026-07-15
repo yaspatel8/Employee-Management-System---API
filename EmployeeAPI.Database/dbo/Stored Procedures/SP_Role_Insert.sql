@@ -1,0 +1,6 @@
+﻿CREATE   PROCEDURE SP_Role_Insert
+@RoleName NVARCHAR(20)
+AS
+BEGIN
+	INSERT INTO Roles(RoleName) VALUES(LOWER(@RoleName))
+END

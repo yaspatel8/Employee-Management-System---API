@@ -15,7 +15,7 @@ namespace EmployeeAPI.Service.Services.Employee
 
         Task<DbResponseModel> SaveEmployee(EmployeeModel employee);
         //Task<int> AddEmployee(EmployeeModel employee);
-        Task<List<EmployeeModel>> GetAllEmployees(CommonPaginationModel model);
+        Task<List<EmployeeModel>> GetAllEmployees(UseridBasedModel model);
         //Task<EmployeeModel?> GetEmployeeById(int id);
         //Task<int> UpdateEmployee(EmployeeModel employee);
         Task<DbResponseModel> DeleteEmployee(int id);

@@ -2,7 +2,8 @@
 using EmployeeAPI.Common.Export;
 using EmployeeAPI.Model.Model;
 using EmployeeAPI.Service.Services.Employee;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -15,6 +16,7 @@ namespace EmployeeAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
@@ -29,7 +31,6 @@ namespace EmployeeAPI.Controllers
         }
 
         [HttpPost("/SaveEmployee")]
-
         public async Task<ApiResponseModel> SaveEmployee([FromForm] EmployeeModel employee)
         {
 
@@ -178,9 +179,24 @@ namespace EmployeeAPI.Controllers
         //}
 
         [HttpPost("/GetAllEmployees")]
-        public async Task<ApiList<EmployeeModel>> GetAllEmployees([FromBody] CommonPaginationModel model)
+        public async Task<ApiList<EmployeeModel>> GetAllEmployees([FromBody] UseridBasedModel model)
         {
             ApiList<EmployeeModel> response = new() { Data = [] };
+            var userId = User.FindFirst("UserId")?.Value;
+
+            if (int.TryParse(userId, out int loggedInUserId))
+            {
+                // YAHAN MAIN MAGIC HAI: 
+                // Frontend ne chahe kuch bhi ID bheji ho, hum usko Token wali ID se replace kar rahe hain
+                model.UserId = loggedInUserId;
+            }
+            else
+            {
+                // Agar token me ID nahi hai ya galat hai, toh yahin se wapas bhej dein
+                response.Success = false;
+                response.Message = "Unauthorized request. Invalid token.";
+                return response;
+            }
 
             var result = await _employeeService.GetAllEmployees(model);
             if (result != null && result.Count > 0)

@@ -1,0 +1,4 @@
+﻿CREATE TYPE [dbo].[IdListType] AS TABLE (
+    [Id] INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC));
+

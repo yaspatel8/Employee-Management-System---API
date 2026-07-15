@@ -76,10 +76,11 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
         //    }
         //}
 
-        public async Task<List<EmployeeModel>> GetAllEmployees(CommonPaginationModel model)
+        public async Task<List<EmployeeModel>> GetAllEmployees(UseridBasedModel model)
         {
 
             DynamicParameters param = new();
+            param.Add("@userId", model.UserId);
             param.Add("@SearchText", model.SearchText);
             param.Add("@PageNumber", model.PageNumber);
             param.Add("@PageSize", model.PageSize);
@@ -87,8 +88,8 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
             param.Add("@SortOrder", model.SortOrder);
             var result = await _db.QueryAsync<EmployeeModel>(StoredProcedure.GetAllEmployees, param, commandType: CommandType.StoredProcedure);
             return result.ToList();
-
         }
+
         //public async Task<EmployeeModel?> GetEmployeeById(int id)
         //{
         //    try

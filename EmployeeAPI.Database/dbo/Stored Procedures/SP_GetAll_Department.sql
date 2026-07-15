@@ -1,0 +1,6 @@
+﻿
+CREATE   PROCEDURE SP_GetAll_Department
+AS
+BEGIN
+	SELECT * FROM Department WHERE IsDeleted=0
+END

@@ -23,10 +23,14 @@ namespace EmployeeAPI.MiddleWare
             if (context.User.Identity?.IsAuthenticated == true)
             {
                 var userIdClaim = context.User.FindFirst("UserId")?.Value;
+                var fullName = context.User.FindFirst("FullName")?.Value;
+                var email = context.User.FindFirst("Email")?.Value;
+                var role = context.User.FindFirst("Role")?.Value;
 
-                if (!string.IsNullOrEmpty(userIdClaim))
+                if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out int userId))
                 {
-                    int userId = Convert.ToInt32(userIdClaim);
+                    _logger.LogInformation("Request from {FullName} ({Email}) with Role: {Role}", fullName, email, role);
+                    //int userId = Convert.ToInt32(userIdClaim);
 
                     bool? isActive = await db.QueryFirstOrDefaultAsync<bool?>(
                         @"SELECT IsActive

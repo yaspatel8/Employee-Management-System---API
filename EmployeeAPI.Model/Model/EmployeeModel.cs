@@ -25,7 +25,8 @@ namespace EmployeeAPI.Model.Model
         public string Email { get; set; } = string.Empty;
 
         public int RoleId { get; set; }
-
+        public string? RoleName { get; set; }
+            
         public string PasswordHash { get; set; } = string.Empty;
         public IFormFile? ProfilePicture { get; set; }
         public string? ProfileImage { get; set; }
