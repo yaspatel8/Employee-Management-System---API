@@ -28,11 +28,9 @@ namespace EmployeeAPI.Data.DBRepositry.Profile
 
         }
 
-        public async Task<List<HierarchyTreeDto>> GetHierarchyTree(int? DepartmentId)
+        public async Task<List<HierarchyTreeDto>> GetHierarchyTree()
         {
-            DynamicParameters param = new();
-            param.Add("@DepartmentId", DepartmentId);
-            var result = await _db.QueryAsync<HierarchyTreeDto>(StoredProcedure.GetHierarchyTree, param, commandType: CommandType.StoredProcedure);
+            var result = await _db.QueryAsync<HierarchyTreeDto>(StoredProcedure.GetHierarchyTree, commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
     }

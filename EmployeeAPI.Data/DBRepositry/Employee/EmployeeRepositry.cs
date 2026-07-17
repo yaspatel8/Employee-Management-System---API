@@ -31,7 +31,6 @@ namespace EmployeeAPI.Data.DBRepositry.Employee
 
         public async Task<DbResponseModel> SaveEmployee(EmployeeModel employee)
         {
-
             DynamicParameters param = new();
             param.Add("@EmployeeId", employee.EmployeeId);
             param.Add("@FullName", employee.FullName);

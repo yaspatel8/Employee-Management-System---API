@@ -42,12 +42,12 @@ namespace EmployeeAPI.Controllers
             return response;
         }
         
-        [HttpPost("/GetHierarchyTree/{DepartmentId}")]
-        public async Task<ApiResponse<List<HierarchyTreeDto>>> GetHierarchyTree(int? DepartmentId )
+        [HttpPost("/GetHierarchyTree")]
+        public async Task<ApiResponse<List<HierarchyTreeDto>>> GetHierarchyTree()
         {
             ApiResponse<List<HierarchyTreeDto>> response = new();
 
-            var result = await _profileService.GetHierarchyTree(DepartmentId);
+            var result = await _profileService.GetHierarchyTree();
             if (result != null)
             {
                 response.Success = true;

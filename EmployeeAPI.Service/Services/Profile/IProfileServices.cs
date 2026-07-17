@@ -11,6 +11,6 @@ namespace EmployeeAPI.Service.Services.Profile
     public interface IProfileServices
     {
         Task<EmployeeWithDepartmentModel> GetProfile(int id);
-        Task<List<HierarchyTreeDto>> GetHierarchyTree(int? DepartmentId);
+        Task<List<HierarchyTreeDto>> GetHierarchyTree();
     }
 }

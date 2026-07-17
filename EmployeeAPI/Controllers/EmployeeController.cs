@@ -186,8 +186,6 @@ namespace EmployeeAPI.Controllers
 
             if (int.TryParse(userId, out int loggedInUserId))
             {
-                // YAHAN MAIN MAGIC HAI: 
-                // Frontend ne chahe kuch bhi ID bheji ho, hum usko Token wali ID se replace kar rahe hain
                 model.UserId = loggedInUserId;
             }
             else
